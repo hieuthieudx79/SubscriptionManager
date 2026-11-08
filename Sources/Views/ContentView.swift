@@ -5,6 +5,8 @@ struct ContentView: View {
     @Query(sort: \SubscriptionItem.renewalDate) private var subscriptions: [SubscriptionItem]
     @State private var selectedTab = 0
     @State private var showingAdd = false
+    @State private var showingPaywall = false
+    @EnvironmentObject private var purchases: PurchaseManager
 
     private var activeSubscriptions: [SubscriptionItem] {
         subscriptions.filter(\.isActive)
@@ -21,7 +23,7 @@ struct ContentView: View {
                     .navigationTitle("Subscriptions")
                     .toolbar {
                         ToolbarItem(placement: .topBarTrailing) {
-                            Button { showingAdd = true } label: {
+                            Button { requestAddSubscription() } label: {
                                 Image(systemName: "plus")
                             }
                             .accessibilityLabel("Add subscription")
@@ -125,7 +127,7 @@ struct ContentView: View {
                     }
                 }
 
-                Button { showingAdd = true } label: {
+                Button { requestAddSubscription() } label: {
                     Label("Add subscription", systemImage: "plus.circle.fill")
                         .font(.headline)
                         .frame(maxWidth: .infinity)
